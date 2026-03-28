@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://activemq.apache.org/schema/core
+           http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+    <amq:broker brokerName="localhost" persistent="true">
+
+        <!-- ✅ KahaDB -->
+        <amq:persistenceAdapter>
+            <amq:kahaDB directory="${activemq.data}/kahadb"/>
+        </amq:persistenceAdapter>
+
+        <!-- ✅ Authentication -->
+        <amq:plugins>
+            <amq:simpleAuthenticationPlugin>
+                <amq:users>
+                    <amq:authenticationUser username="admin" password="admin" groups="admins"/>
+                    <amq:authenticationUser username="user" password="user" groups="users"/>
+                </amq:users>
+            </amq:simpleAuthenticationPlugin>
+        </amq:plugins>
+
+        <!-- ✅ Transport -->
+        <amq:transportConnectors>
+            <amq:transportConnector name="openwire" uri="tcp://0.0.0.0:61616"/>
+        </amq:transportConnectors>
+
+    </amq:broker>
+
+</beans>
